@@ -4,6 +4,7 @@ use quote::quote;
 use std::fmt;
 use syn::{Attribute, DataStruct, Fields, Ident, LitBool, Type};
 
+// list of subkeys accepted by the "vertex" key in proc-macro
 const KNOWN_SUBKEYS: &[&str] = &["sem", "instanced"];
 
 #[derive(Debug)]

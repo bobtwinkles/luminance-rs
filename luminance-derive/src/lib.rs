@@ -1,13 +1,33 @@
 extern crate proc_macro;
 
 mod attrib;
+mod uniform_interface;
 mod vertex;
 mod vertex_attrib_sem;
 
+use crate::generate_uniform_interface;
 use crate::vertex::generate_vertex_impl;
 use crate::vertex_attrib_sem::generate_enum_vertex_attrib_sem_impl;
 use proc_macro::TokenStream;
-use syn::{self, Data, DeriveInput, parse_macro_input};
+use syn::{Data, DeriveInput, parse_macro_input};
+
+#[proc_macro_derive(Vertex, attributes(vertex))]
+pub fn derive_vertex(input: TokenStream) -> TokenStream {
+  let di: DeriveInput = parse_macro_input!(input);
+
+  match di.data {
+    // for now, we only handle structs
+    Data::Struct(struct_) => {
+      match generate_uniform_interface_impl(di.ident, di.attrs.iter(), struct_) {
+        Ok(impl_) => impl_,
+        Err(e) => panic!("{}", e)
+      }
+    }
+
+    _ => panic!("only structs are currently supported for deriving Vertex")
+  }
+}
+
 
 #[proc_macro_derive(Vertex, attributes(vertex))]
 pub fn derive_vertex(input: TokenStream) -> TokenStream {
