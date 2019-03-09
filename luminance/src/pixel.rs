@@ -190,6 +190,14 @@ impl_Pixel!(R16UI, u16, u16, Unsigned, Format::R(Size::Sixteen));
 impl_ColorPixel!(R16UI);
 impl_RenderablePixel!(R16UI);
 
+/// A red 16-bit unsigned integral pixel format.
+#[derive(Clone, Copy, Debug)]
+pub struct R16F;
+
+impl_Pixel!(R16F, f32, f32, Floating, Format::R(Size::Sixteen));
+impl_ColorPixel!(R16F);
+impl_RenderablePixel!(R16F);
+
 // --------------------
 
 /// A red 32-bit signed integral pixel format.
@@ -269,6 +277,20 @@ impl_Pixel!(
 );
 impl_ColorPixel!(RG16UI);
 impl_RenderablePixel!(RG16UI);
+
+/// A red and green 16-bit unsigned integral pixel format.
+#[derive(Clone, Copy, Debug)]
+pub struct RG16F;
+
+impl_Pixel!(
+    RG16F,
+    (f32, f32),
+    f32,
+    Floating,
+    Format::RG(Size::Sixteen, Size::Sixteen)
+);
+impl_ColorPixel!(RG16F);
+impl_RenderablePixel!(RG16F);
 
 // --------------------
 
@@ -374,6 +396,20 @@ impl_Pixel!(
 impl_ColorPixel!(RGB16UI);
 impl_RenderablePixel!(RGB16UI);
 
+/// A red, green and blue 16-bit floating point pixel format.
+#[derive(Clone, Copy, Debug)]
+pub struct RGB16F;
+
+impl_Pixel!(
+  RGB16F,
+  (f32, f32, f32),
+  f32,
+  Floating,
+  Format::RGB(Size::Sixteen, Size::Sixteen, Size::Sixteen)
+);
+impl_ColorPixel!(RGB16F);
+impl_RenderablePixel!(RGB16F);
+
 // --------------------
 
 /// A red, green and blue 32-bit signed integral pixel format.
@@ -478,6 +514,20 @@ impl_Pixel!(
 impl_ColorPixel!(RGBA16UI);
 impl_RenderablePixel!(RGBA16UI);
 
+/// A red, green, blue, and alpha 16-bit floating point pixel format.
+#[derive(Clone, Copy, Debug)]
+pub struct RGBA16F;
+
+impl_Pixel!(
+    RGBA16F,
+    (f32, f32, f32),
+    f32,
+    Floating,
+    Format::RGBA(Size::Sixteen, Size::Sixteen, Size::Sixteen, Size::Sixteen)
+);
+impl_ColorPixel!(RGBA16F);
+impl_RenderablePixel!(RGBA16F);
+
 // --------------------
 
 /// A red, green, blue and alpha 32-bit signed integral pixel format.
@@ -551,6 +601,7 @@ pub(crate) fn opengl_pixel_format(pf: PixelFormat) -> Option<(GLenum, GLenum, GL
     (Format::R(Size::Eight), Type::Unsigned) => Some((gl::RED_INTEGER, gl::R8UI, gl::UNSIGNED_BYTE)),
     (Format::R(Size::Sixteen), Type::Integral) => Some((gl::RED_INTEGER, gl::R16I, gl::SHORT)),
     (Format::R(Size::Sixteen), Type::Unsigned) => Some((gl::RED_INTEGER, gl::R16UI, gl::UNSIGNED_SHORT)),
+    (Format::R(Size::Sixteen), Type::Floating) => Some((gl::RED, gl::R16F, gl::FLOAT)),
     (Format::R(Size::ThirtyTwo), Type::Integral) => Some((gl::RED_INTEGER, gl::R32I, gl::INT)),
     (Format::R(Size::ThirtyTwo), Type::Unsigned) => Some((gl::RED_INTEGER, gl::R32UI, gl::UNSIGNED_INT)),
     (Format::R(Size::ThirtyTwo), Type::Floating) => Some((gl::RED, gl::R32F, gl::FLOAT)),
@@ -564,6 +615,9 @@ pub(crate) fn opengl_pixel_format(pf: PixelFormat) -> Option<(GLenum, GLenum, GL
     }
     (Format::RG(Size::Sixteen, Size::Sixteen), Type::Unsigned) => {
       Some((gl::RG_INTEGER, gl::RG16UI, gl::UNSIGNED_SHORT))
+    }
+    (Format::RG(Size::Sixteen, Size::Sixteen), Type::Floating) => {
+      Some((gl::RG, gl::RG16F, gl::FLOAT))
     }
     (Format::RG(Size::ThirtyTwo, Size::ThirtyTwo), Type::Integral) => {
       Some((gl::RG_INTEGER, gl::RG32I, gl::INT))
@@ -584,6 +638,9 @@ pub(crate) fn opengl_pixel_format(pf: PixelFormat) -> Option<(GLenum, GLenum, GL
     }
     (Format::RGB(Size::Sixteen, Size::Sixteen, Size::Sixteen), Type::Unsigned) => {
       Some((gl::RGB_INTEGER, gl::RGB16UI, gl::UNSIGNED_SHORT))
+    }
+    (Format::RGB(Size::Sixteen, Size::Sixteen, Size::Sixteen), Type::Floating) => {
+      Some((gl::RGB, gl::RGB16F, gl::FLOAT))
     }
     (Format::RGB(Size::Eleven, Size::Eleven, Size::Ten), Type::Floating) => {
       Some((gl::RGB, gl::R11F_G11F_B10F, gl::FLOAT))
@@ -609,6 +666,9 @@ pub(crate) fn opengl_pixel_format(pf: PixelFormat) -> Option<(GLenum, GLenum, GL
     }
     (Format::RGBA(Size::Sixteen, Size::Sixteen, Size::Sixteen, Size::Sixteen), Type::Unsigned) => {
       Some((gl::RGBA_INTEGER, gl::RGBA16UI, gl::UNSIGNED_SHORT))
+    }
+    (Format::RGBA(Size::Sixteen, Size::Sixteen, Size::Sixteen, Size::Sixteen), Type::Floating) => {
+      Some((gl::RGBA, gl::RGBA16F, gl::FLOAT))
     }
     (Format::RGBA(Size::ThirtyTwo, Size::ThirtyTwo, Size::ThirtyTwo, Size::ThirtyTwo), Type::Integral) => {
       Some((gl::RGBA_INTEGER, gl::RGBA32I, gl::INT))
